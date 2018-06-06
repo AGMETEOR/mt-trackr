@@ -15,7 +15,7 @@ manager.add_command("runserver", Server(
     use_debugger=True,
     use_reloader=True,
     host=os.getenv("IP", '127.0.0.1'),
-    port=int(os.getenv("PORT", 5000))
+    port=int(os.getenv("PORT", 5001))
 ))
 
 if __name__ == "__main__":

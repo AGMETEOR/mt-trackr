@@ -45,7 +45,7 @@ class DatabaseHandler:
                 return {"error":"Couldn't Insert into Database"}
 
     def get_all_records(self,tbl_name):
-        self.cursor.execute("SELECT * FROM {}".format(tbl_name))
+        self.cursor.execute("SELECT * FROM {} ORDER BY id ASC".format(tbl_name))
         requests = self.cursor.fetchall()
         for request in requests:
             pprint(request)
@@ -58,18 +58,28 @@ class DatabaseHandler:
         return list(request)
 
 
-    def update_record(self, id, **kwargs):
+    def update_record(self, id,tbl_name, **kwargs):
         statement = ""
        
         if kwargs is not None:
             for key, value in kwargs.items():
-                statement = statement + key + " = ('" + value + "'),"
+                statement = statement + key + " = '" + value + "',"
 
             pprint(statement.rstrip(","))
             statement = statement.rstrip(",")
 
-            update_cmd = "UPDATE mt_requests SET " + statement + "WHERE id = {}".format(id)
-            self.cursor.execute(update_cmd)
+            update_cmd = "UPDATE {} SET ".format(tbl_name) + statement + " WHERE id = {}".format(id)
+            pprint(update_cmd)
+            try:
+                self.cursor.execute(update_cmd)
+                get_back_cmd = "SELECT * FROM {} WHERE id = {}".format(tbl_name,id)
+                self.cursor.execute(get_back_cmd)
+                request = self.cursor.fetchone()
+                pprint(list(request))
+                return list(request)
+            except:
+                return {"error":"Couldn't insert into database"}
+            
         pprint(update_cmd)
 
     def delete_record(self, tbl_name, id):
@@ -101,9 +111,9 @@ class UserDatabaseHandler(DatabaseHandler):
 if __name__ == "__main__":
     db = DatabaseHandler("test_db")
     # userdb = UserDatabaseHandler("test_db")
-    # db.update_record(id = 2,title = "Elevator Maintenance2",department = "Admin Department2",detail = "This is better detail2")
-    items = db.get_all_records("requests_db")
-    pprint(items)
+    db.update_record(125,"requests_db",username = "allan@gmail.com",title = "Elevator Maintenance",department = "Admin Department26668",detail = "This is better detail2")
+    # items = db.get_all_records("requests_db")
+    # pprint(items)
     # userdb.get_all_records("users_db")
     # userdb.get_single_record("allan@gmail.com","users_db")
     # userdb.delete_record("users_db","allan@gmail.com")
