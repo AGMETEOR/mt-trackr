@@ -45,7 +45,11 @@ class RequestsAPI(MethodView):
     def get(user, self, requestId):
         returnObj = {}
         if requestId:
-            dataR = db.get_single_record("id",requestId,"requests_db")
+            dataR = db.get_single_record("id",requestId,"requests_db",user)
+
+            if dataR is None:
+                return jsonify({"error":"Couldn't find request in your data"}),404
+
 
             returnObj["id"] = dataR[0]
             returnObj["user"] = dataR[1]
@@ -59,7 +63,7 @@ class RequestsAPI(MethodView):
         else:
             items = {"requests":[]}
             
-            requestItems = db.get_all_records("requests_db")
+            requestItems = db.get_all_records("requests_db",user)
 
             for i in requestItems:
                 _dict = {
