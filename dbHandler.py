@@ -44,18 +44,21 @@ class DatabaseHandler:
             except:
                 return {"error":"Couldn't Insert into Database"}
 
-    def get_all_records(self,tbl_name):
-        self.cursor.execute("SELECT * FROM {} ORDER BY id ASC".format(tbl_name))
+    def get_all_records(self,tbl_name,username):
+        self.cursor.execute("SELECT * FROM {} WHERE username = '{}' ORDER BY id ASC".format(tbl_name,username))
         requests = self.cursor.fetchall()
         for request in requests:
             pprint(request)
         return list(requests)
             #return all the records
 
-    def get_single_record(self,column, value, tbl_name):
-        self.cursor.execute("SELECT * FROM {} WHERE {} = {}".format(tbl_name,column, value))
-        request = self.cursor.fetchone()
-        return list(request)
+    def get_single_record(self,column, value, tbl_name,username):
+        try:
+            self.cursor.execute("SELECT * FROM {} WHERE {} = {} AND username = '{}'".format(tbl_name,column, value,username))
+            request = self.cursor.fetchone()
+            return request
+        except:
+            return {"error":"Couldn't select item"}
 
 
     def update_record(self, id,tbl_name, **kwargs):
