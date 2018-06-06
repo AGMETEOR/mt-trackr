@@ -97,9 +97,13 @@ class UserDatabaseHandler(DatabaseHandler):
         self.cursor.execute(create_table_cmd)
 
     def get_single_record(self,username,tbl_name):
-        self.cursor.execute("SELECT * FROM {} WHERE username = '{}'".format(tbl_name, username))
-        request = self.cursor.fetchall()
-        print(request)
+        try:
+            self.cursor.execute("SELECT * FROM {} WHERE username = '{}'".format(tbl_name, username))
+            request = self.cursor.fetchone()
+            return list(request)
+        except:
+            return None
+
 
     def delete_record(self,tbl_name, username):
 
@@ -109,13 +113,13 @@ class UserDatabaseHandler(DatabaseHandler):
 
 
 if __name__ == "__main__":
-    db = DatabaseHandler("test_db")
-    # userdb = UserDatabaseHandler("test_db")
-    db.update_record(125,"requests_db",username = "allan@gmail.com",title = "Elevator Maintenance",department = "Admin Department26668",detail = "This is better detail2")
+    # db = DatabaseHandler("test_db")
+    userdb = UserDatabaseHandler("test_db")
+    # db.update_record(125,"requests_db",username = "allan@gmail.com",title = "Elevator Maintenance",department = "Admin Department26668",detail = "This is better detail2")
     # items = db.get_all_records("requests_db")
     # pprint(items)
     # userdb.get_all_records("users_db")
-    # userdb.get_single_record("allan@gmail.com","users_db")
+    # userdb.get_single_record("allan","users_db")
     # userdb.delete_record("users_db","allan@gmail.com")
     # _list = list(db.get_single_record("id", "3" ,"requests_db"))
     # pprint(_list)
@@ -125,6 +129,6 @@ if __name__ == "__main__":
 
     # _list = db.insert_new_record("requests_db",username = "allan@gmail.com", title = "Elevator Maintenance2",department = "Admin Department2",detail = "This is better detail2",status="pending",created = str(datetime.datetime.utcnow()))
     # pprint(_list[0])
-    # userdb.insert_new_record("users_db",username = "allan@gmail.com", password = "Elevator Maintenance2",type="Admin")
+    # userdb.insert_new_record("users_db",username = "julie", password = "Elevator Maintenance2",type="Admin", created = datetime.datetime.utcnow())
     
 

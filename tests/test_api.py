@@ -4,9 +4,6 @@ import json
 import jwt
 
 
-
-
-
 class TestClass(unittest.TestCase):
 
     def setUp(self):
