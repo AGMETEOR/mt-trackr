@@ -12,7 +12,7 @@ import pprint
 
 # database = Data()
 db = DatabaseHandler("test_db")
-db.create_table("requests_db")
+# db.create_table("requests_db")
 
 class RequestsAPI(MethodView):
     # post request
