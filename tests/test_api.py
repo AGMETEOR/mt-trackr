@@ -45,6 +45,8 @@ class TestClass(unittest.TestCase):
     def test_get_single_request(self):
         self.assertEqual(self.res.status_code, 201)
         id = json.loads(self.res.data)["id"]
+        print(id)
+        
         res = self.client().get('api/v1/users/requests/{}/'.format(id),
                                 headers={'Authorization': self.data["token"], 'Content-Type': 'application/json; charset=utf-8'})
         self.assertEqual(res.status_code, 200)
@@ -54,6 +56,7 @@ class TestClass(unittest.TestCase):
     def test_put_request(self):
         self.assertEqual(self.res.status_code, 201)
         id = json.loads(self.res.data)["id"]
+        print(id)
         title = json.loads(self.res.data)["title"]
         newObj = json.loads(self.res.data)
         newObj["title"] = title

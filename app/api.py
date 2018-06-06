@@ -46,9 +46,19 @@ class RequestsAPI(MethodView):
 
     @AuthAPI.login_required
     def get(user, self, requestId):
+        returnObj = {}
         if requestId:
-            requestItem = db.get_single_record("id",requestId,"requests_db")
-            return jsonify({"requests": [requestItem]}), 200
+            dataR = db.get_single_record("id",requestId,"requests_db")
+
+            returnObj["id"] = dataR[0]
+            returnObj["user"] = dataR[1]
+            returnObj["title"] =dataR[2]
+            returnObj["department"] = dataR[3]
+            returnObj["detail"] = dataR[4]
+            returnObj["status"] = dataR[5]
+            returnObj["created"] = dataR[6]
+            
+            return jsonify({"requests": [returnObj]}), 200
         else:
             items = {"requests":[]}
             
@@ -70,18 +80,29 @@ class RequestsAPI(MethodView):
 
     @AuthAPI.login_required
     def put(user, self, requestId):
-        if request.headers['Authorization']:
-            if requestId:
-                # requestItem = self.database.get_single_item(str(requestId))
-                retObj = {
-                    "id": requestId,
-                    "title": request.json['title'],
-                    "department": request.json['department'],
-                    "detail": request.json['detail'],
-                    "status": request.json['status']
-                }
-            # self.database.update_table(requestId, reqObj)
-            # retObj = self.database.get_single_item(str(requestId))
-            return jsonify(retObj), 201
-        else:
-            return jsonify({"error": "Unauthorized"}), 401
+        returnObj = {}
+
+        if not request.json:
+            abort(400)
+
+        if requestId:
+            username = user
+            title = request.json['title']
+            department = request.json['department']
+            detail = request.json['detail']
+            status = request.json['status']
+            created = str(datetime.datetime.utcnow())
+
+            dataR = db.update_record(requestId,"requests_db",username=username, title= title, department=department, detail=detail,status = status,created=created)
+
+            returnObj["id"] = dataR[0]
+            returnObj["user"] = dataR[1]
+            returnObj["title"] =dataR[2]
+            returnObj["department"] = dataR[3]
+            returnObj["detail"] = dataR[4]
+            returnObj["status"] = dataR[5]
+            returnObj["created"] = dataR[6]
+            
+
+        return jsonify(returnObj), 201
+
