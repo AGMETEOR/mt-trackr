@@ -1,7 +1,6 @@
 from flask.views import MethodView
 from flask import jsonify, request, abort
 import json
-# from data import Data
 from dbHandler import DatabaseHandler
 import jwt
 import os
@@ -9,8 +8,6 @@ from authentication.views import AuthAPI
 import datetime
 import pprint
 
-
-# database = Data()
 db = DatabaseHandler("test_db")
 # db.create_table("requests_db")
 

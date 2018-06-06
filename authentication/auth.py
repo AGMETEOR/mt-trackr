@@ -10,11 +10,12 @@ from functools import wraps
 from dbHandler import UserDatabaseHandler
 
 userdb = UserDatabaseHandler("test_db")
-userdb.create_table("users_db")
+# userdb.create_table("new_users_db")
 
 
 
 class AuthAPI(MethodView):
+    
     def generate_token(self,user):
 
         token  = jwt.encode({"user":user,"exp":datetime.datetime.utcnow() + datetime.timedelta(minutes=60)},os.getenv('JWT_SECRET'))
@@ -23,23 +24,36 @@ class AuthAPI(MethodView):
         
     # user login and return token
     def post(self):
-        if 'username' in request.json and 'password' in request.json:
+        if 'username' in request.json and 'password' in request.json and 'status' not in request.json:
             user = request.get_json()['username']
-            self.token = self.generate_token(user)
-            return jsonify({"username":request.get_json()['username'],"token":token})
+            password = request.get_json()['password']
+            my_user = userdb.get_single_record(user,"new_users_db")
+            if my_user is not None:
+                hashed_password = my_user[2]
+                if bcrypt.checkpw(password.encode(), hashed_password.encode()):
+                    token = self.generate_token(user)
+                    return jsonify({"username":user,"token":token})
+                else:
+                    return jsonify({"error":"Password and username didn't match"})
+            else:
+                return jsonify({"error":"Wrong username or password"})
         elif 'username' in request.json and 'password' in request.json and 'status' in request.json:
-            username = request.get_json()['username']
-            my_user = userdb.get_single_record("users_db",username)
-            if my_user != None:
+    
+            user = request.get_json()['username']
+            my_user = userdb.get_single_record(user,"new_users_db")
+            if my_user is None:
+                
+                hashed_passw = bcrypt.hashpw(request.get_json()["password"].encode(), bcrypt.gensalt())
+                passw = hashed_passw.decode()
+                stat = request.get_json()['status']
+                cretd = str(datetime.datetime.utcnow())
 
-                password = bcrypt.hashpw(request.get_json()['password'], bcrypt.gensalt())
-                status = request.get_json()['status']
-                created = str(datetime.datetime.utcnow())
-                userdb.insert_new_record("users_db",username = username,password=password,type = status, created=created)
+                userdb.insert_new_record("new_users_db",username = user,password=passw,type = stat, created=cretd)
+                # userdb.insert_new_record("new_users_db",username = "julie", password = "Elevator Maintenance2",type="Admin", created = str(datetime.datetime.utcnow()))
                 return jsonify({
                     "message":"You were successfully signed up",
                     "login":"http://127.0.0.1:5001/api/v1/login/"}),201
-            else:
+            elif my_user is not None:
                 return jsonify({"error":"Username already exists!"})
         
         else:
