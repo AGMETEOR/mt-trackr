@@ -122,26 +122,3 @@ class UserDatabaseHandler(DatabaseHandler):
             tbl_name, username)
         pprint(delete_cmd)
         self.cursor.execute(delete_cmd)
-
-
-# if __name__ == "__main__":
-#     db = DatabaseHandler("test_db")
-#     ite = db.get_single_record("id",3,"requests_db","Allan")
-#     pprint(ite)
-    # userdb = UserDatabaseHandler("test_db")
-    # db.update_record(125,"requests_db",username = "allan@gmail.com",title = "Elevator Maintenance",department = "Admin Department26668",detail = "This is better detail2")
-    # items = db.get_all_records("requests_db")
-    # pprint(items)
-    # userdb.get_all_records("users_db")
-    # val = userdb.get_single_record("juie","users_db")
-    # pprint(val)
-    # userdb.delete_record("users_db","allan@gmail.com")
-    # _list = list(db.get_single_record("id", "3" ,"requests_db"))
-    # pprint(_list)
-    # db.delete_record(1)
-    # db.create_table("requests_db")
-    # userdb.create_table("users_db")
-
-    # _list = db.insert_new_record("requests_db",username = "allan@gmail.com", title = "Elevator Maintenance2",department = "Admin Department2",detail = "This is better detail2",status="pending",created = str(datetime.datetime.utcnow()))
-    # pprint(_list[0])
-    # userdb.insert_new_record("new_users_db",username = "julie", password = "Elevator Maintenance2",type="Admin", created = str(datetime.datetime.utcnow()))
