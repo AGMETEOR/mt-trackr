@@ -23,7 +23,8 @@ class TestClass(unittest.TestCase):
             c.post('auth/signup/',headers={'Content-Type': 'application/json; charset=utf-8'},data=json.dumps({"username": "testingme", "password": "iamsecret","status":"normal"}))
             self.tk_res = c.post('auth/login/', headers={'Content-Type': 'application/json; charset=utf-8'}, data=json.dumps({"username": "testingme", "password": "iamsecret"}))
             
-            self.data = json.loads(self.tk_res.get_json()["token"].encode())
+            self.data = dict(self.tk_res.get_json())["token"]
+            # print(str(self.data))
 
             self.res = c.post('api/v1/users/requests/', headers={'Authorization': self.data,'Content-Type': 'application/json; charset=utf-8'}, data=json.dumps(self.request_body))
 
