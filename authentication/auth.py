@@ -2,7 +2,6 @@ from flask.views import MethodView
 from flask import jsonify, request, abort
 import json
 import bcrypt
-# from data import Data
 import jwt
 import datetime
 import os
