@@ -12,9 +12,11 @@ def create_app(mode):
     app.config['SECRET_KEY'] = "HAHAHAHA"
 
     from app.views import requests
+    from admin.views import admin_requests
     from authentication.views import authentication
 
     app.register_blueprint(requests)
     app.register_blueprint(authentication)
+    app.register_blueprint(admin_requests)
 
     return app

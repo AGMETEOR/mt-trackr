@@ -44,17 +44,26 @@ class DatabaseHandler:
             except:
                 return {"error":"Couldn't Insert into Database"}
 
-    def get_all_records(self,tbl_name,username):
-        self.cursor.execute("SELECT * FROM {} WHERE username = '{}' ORDER BY id ASC".format(tbl_name,username))
+    def get_all_records(self,tbl_name,username = None):
+        if username:
+            select_cmd = "SELECT * FROM {} WHERE username = '{}' ORDER BY id ASC".format(tbl_name,username)
+        else:
+            select_cmd = "SELECT * FROM {} ORDER BY id ASC".format(tbl_name,username)
+
+        self.cursor.execute(select_cmd)
         requests = self.cursor.fetchall()
         for request in requests:
             pprint(request)
         return list(requests)
             #return all the records
 
-    def get_single_record(self,column, value, tbl_name,username):
+    def get_single_record(self,column, value, tbl_name,username = None):
+        if username:
+            select_cmd = "SELECT * FROM {} WHERE {} = {} AND username = '{}'".format(tbl_name,column, value,username)
+        else:
+            select_cmd = "SELECT * FROM {} WHERE {} = {}".format(tbl_name,column, value)
         try:
-            self.cursor.execute("SELECT * FROM {} WHERE {} = {} AND username = '{}'".format(tbl_name,column, value,username))
+            self.cursor.execute(select_cmd)
             request = self.cursor.fetchone()
             return request
         except:
@@ -116,7 +125,9 @@ class UserDatabaseHandler(DatabaseHandler):
 
 
 # if __name__ == "__main__":
-    # db = DatabaseHandler("test_db")
+#     db = DatabaseHandler("test_db")
+#     ite = db.get_single_record("id",3,"requests_db","Allan")
+#     pprint(ite)
     # userdb = UserDatabaseHandler("test_db")
     # db.update_record(125,"requests_db",username = "allan@gmail.com",title = "Elevator Maintenance",department = "Admin Department26668",detail = "This is better detail2")
     # items = db.get_all_records("requests_db")
