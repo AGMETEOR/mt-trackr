@@ -9,11 +9,11 @@
 Maintenance Tracker App is an application that provides users with the ability to reach out to operations or repairs department regarding repair or maintenance requests and monitor the status of their request.
 
 ## Prerequisites
-> $ pip install -r requirements.txt """
+> $ pip install -r requirements.txt 
 
 ## Run
 
-> $ python manage.py runserver """
+> $ python manage.py runserver 
 
 ## Testing
 > $ nosetests
