@@ -13,12 +13,13 @@ class TestClass(unittest.TestCase):
         self.request_body = {
             "id": 565,
             "title": "Elevator Maintenance",
-            "department": "Accounts",
+            "department": "Accounts", 
             "detail": "We need to repair asap",
             "status": "urgent"
         }
 
         with self.app.test_client() as c:
+            c.post('auth/signup/',headers={'Content-Type': 'application/json; charset=utf-8'},data=json.dumps({"username": "agmeteor", "password": "iamsecret","status":"normal"}))
             self.tk_res = c.post('auth/login/', headers={'Content-Type': 'application/json; charset=utf-8'}, data=json.dumps(
                 {"username": "agmeteor", "password": "iamsecret"}))
             self.data = json.loads(self.tk_res.data.decode())
