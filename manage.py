@@ -6,7 +6,6 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from flask_script import Manager, Server
 from application import create_app
 
-# pass the mode to the app
 
 app = create_app('dev')
 manager = Manager(app)

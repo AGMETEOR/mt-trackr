@@ -19,14 +19,15 @@ class TestClass(unittest.TestCase):
         }
 
         with self.app.test_client() as c:
-            self.tk_res = c.post('api/v1/login/',headers ={'Content-Type': 'application/json; charset=utf-8'}, data = json.dumps({"username":"agmeteor","password":"iamsecret"}))
+            self.tk_res = c.post('api/v1/login/', headers={'Content-Type': 'application/json; charset=utf-8'}, data=json.dumps(
+                {"username": "agmeteor", "password": "iamsecret"}))
             self.data = json.loads(self.tk_res.data.decode())
             self.res = c.post('api/v1/users/requests/', headers={'Authorization': self.data["token"],
                                                                  'Content-Type': 'application/json; charset=utf-8'}, data=json.dumps(self.request_body))
-    def test_login(self):
-        self.assertEqual(self.tk_res.status_code,200)
-        self.assertIn('token',json.loads(self.tk_res.data))
 
+    def test_login(self):
+        self.assertEqual(self.tk_res.status_code, 200)
+        self.assertIn('token', json.loads(self.tk_res.data))
 
     def test_request_creation(self):
         self.assertEqual(self.res.status_code, 201)
@@ -43,7 +44,7 @@ class TestClass(unittest.TestCase):
         self.assertEqual(self.res.status_code, 201)
         id = json.loads(self.res.data)["id"]
         print(id)
-        
+
         res = self.client().get('api/v1/users/requests/{}/'.format(id),
                                 headers={'Authorization': self.data["token"], 'Content-Type': 'application/json; charset=utf-8'})
         self.assertEqual(res.status_code, 200)

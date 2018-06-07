@@ -13,4 +13,3 @@ requests.add_url_rule('/api/v1/users/requests/', view_func=requests_view,
                       methods=['GET'], defaults={"requestId": None})
 requests.add_url_rule('/api/v1/users/requests/<string:requestId>/',
                       view_func=requests_view, methods=['GET', 'PUT', ])
-
