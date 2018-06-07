@@ -7,14 +7,13 @@ import os
 from authentication.views import AuthAPI
 import datetime
 
-
 db = DatabaseHandler("test_db")
 # db.create_table("requests_db")
 
-
 class RequestsAPI(MethodView):
+    decorators = [AuthAPI.login_required]
     # post request
-    @AuthAPI.login_required
+    # @AuthAPI.login_required
     def post(user, self):
         returnObj = {}
 
@@ -41,7 +40,7 @@ class RequestsAPI(MethodView):
 
         return jsonify(returnObj), 201
 
-    @AuthAPI.login_required
+    # @AuthAPI.login_required
     def get(user, self, requestId):
         returnObj = {}
         if requestId:
@@ -78,7 +77,7 @@ class RequestsAPI(MethodView):
 
             return jsonify(items), 200
 
-    @AuthAPI.login_required
+    # @AuthAPI.login_required
     def put(user, self, requestId):
         returnObj = {}
 
