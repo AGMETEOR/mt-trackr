@@ -9,7 +9,7 @@ from functools import wraps
 from dbHandler import UserDatabaseHandler
 
 userdb = UserDatabaseHandler("test_db")
-# userdb.create_table("new_users_db")
+userdb.create_table("new_users_db")
 
 
 class AuthAPI(MethodView):
@@ -59,7 +59,7 @@ class AuthAPI(MethodView):
 
         else:
             return jsonify({"error": "Please provide username or password"}), 401
-            
+
     @staticmethod
     def login_required(f):
         @wraps(f)
