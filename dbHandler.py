@@ -54,10 +54,8 @@ class DatabaseHandler:
 
         self.cursor.execute(select_cmd)
         requests = self.cursor.fetchall()
-        for request in requests:
-
         return list(requests)
-        # return all the records
+ 
 
     def get_single_record(self, column, value, tbl_name, username=None):
         if username:
