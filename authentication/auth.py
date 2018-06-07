@@ -9,7 +9,7 @@ from functools import wraps
 from dbHandler import UserDatabaseHandler
 
 userdb = UserDatabaseHandler("test_db")
-userdb.create_table("new_users_db")
+# userdb.create_table("new_users_db")
 
 
 class AuthAPI(MethodView):
@@ -25,20 +25,24 @@ class AuthAPI(MethodView):
     def post(self):
         if 'username' in request.json and 'password' in request.json and 'status' not in request.json:
             user = request.get_json()['username']
+            if len(user.strip()) == 0:
+                return jsonify({"error":"Invalid format. no spaces"}),403
             password = request.get_json()['password']
             my_user = userdb.get_single_record(user, "new_users_db")
             if my_user is not None:
                 hashed_password = my_user[2]
                 if bcrypt.checkpw(password.encode(), hashed_password.encode()):
                     token = self.generate_token(user)
-                    return jsonify({"username": user, "token": token})
+                    return jsonify({"username": user, "token": token}),200
                 else:
-                    return jsonify({"error": "Password and username didn't match"})
+                    return jsonify({"error": "Password and username didn't match"}),401
             else:
-                return jsonify({"error": "Wrong username or password"})
+                return jsonify({"error": "Wrong username or password"}),401
         elif 'username' in request.json and 'password' in request.json and 'status' in request.json:
 
             user = request.get_json()['username']
+            if len(user.strip()) == 0:
+                return jsonify({"error":"Invalid format. no spaces"}),403
             my_user = userdb.get_single_record(user, "new_users_db")
             if my_user is None:
 
@@ -55,10 +59,10 @@ class AuthAPI(MethodView):
                     "message": "You were successfully signed up",
                     "login": "http://127.0.0.1:5001/api/v1/login/"}), 201
             elif my_user is not None:
-                return jsonify({"error": "Username already exists!"})
+                return jsonify({"error": "Username already exists!"}),403
 
         else:
-            return jsonify({"error": "Please provide username or password"}), 401
+            return jsonify({"error": "Please provide username or password"}), 403
 
     @staticmethod
     def login_required(f):

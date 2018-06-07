@@ -98,6 +98,13 @@ class DatabaseHandler:
 
         self.cursor.execute(delete_cmd)
 
+    def truncate_table(self,tbl_name):
+        truncate_command = "TRUNCATE {}".format(tbl_name)
+        try:
+            self.cursor.execute(truncate_command)
+        except:
+            return {"error":"Truncate operation could not be peformed"}
+
 
 class UserDatabaseHandler(DatabaseHandler):
 
