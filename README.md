@@ -24,4 +24,11 @@ Maintenance Tracker App is an application that provides users with the ability t
 | ------------- | ------------- |
 | POST /auth/signup  | Register a user  |
 | POST /auth/login  | Login a user  |
-
+| GET /users/requests | Fetch all the requests of a logged in user |
+| GET /users/requests/<requestId>/ |  Fetch a request that belongs to a logged in user |
+| POST /users/requests |Create a request |
+| PUT /users/requests/<requestId> |Modify a request |
+| Get /requests/   | Fetch all the requests. Available to only admin |
+| PUT /requests/<requestId>/approve/ | Approve request. This is available only to admin users. When this endpoint is called, the status of the request should be pending.|
+|PUT /requests/<requestId>/disapprove |Disapprove request. This is available only to admin users. |
+| PUT /requests/<requestId>/resolve | Resolve request. This is available only to admin users. |
