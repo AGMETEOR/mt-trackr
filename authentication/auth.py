@@ -50,7 +50,7 @@ class AuthAPI(MethodView):
 
                 userdb.insert_new_record(
                     "new_users_db", username=user, password=passw, type=stat, created=cretd)
-                # userdb.insert_new_record("new_users_db",username = "julie", password = "Elevator Maintenance2",type="Admin", created = str(datetime.datetime.utcnow()))
+
                 return jsonify({
                     "message": "You were successfully signed up",
                     "login": "http://127.0.0.1:5001/api/v1/login/"}), 201
