@@ -19,9 +19,8 @@ class TestClass(unittest.TestCase):
         }
 
         with self.app.test_client() as c:
-            c.post('auth/signup/',headers={'Content-Type': 'application/json; charset=utf-8'},data=json.dumps({"username": "agmeteor", "password": "iamsecret","status":"normal"}))
-            self.tk_res = c.post('auth/login/', headers={'Content-Type': 'application/json; charset=utf-8'}, data=json.dumps(
-                {"username": "agmeteor", "password": "iamsecret"}))
+            resss = c.post('auth/signup/',headers={'Content-Type': 'application/json; charset=utf-8'},data=json.dumps({"username": "testing me", "password": "iamsecret","status":"normal"}))
+            self.tk_res = c.post('auth/login/', headers={'Content-Type': 'application/json; charset=utf-8'}, data=json.dumps({"username": "testing me", "password": "iamsecret"}))
             self.data = json.loads(self.tk_res.data.decode())
             self.res = c.post('api/v1/users/requests/', headers={'Authorization': self.data["token"],
                                                                  'Content-Type': 'application/json; charset=utf-8'}, data=json.dumps(self.request_body))
