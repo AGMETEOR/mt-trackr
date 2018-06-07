@@ -104,7 +104,7 @@ class UserDatabaseHandler(DatabaseHandler):
     def create_table(self, tbl_name):
         create_table_cmd = "CREATE TABLE {}(id serial PRIMARY KEY, username varchar(400), password varchar(100), type varchar(20), created timestamp)".format(
             tbl_name)
-        pprint(create_table_cmd)
+        
         self.cursor.execute(create_table_cmd)
 
     def get_single_record(self, username, tbl_name):
