@@ -9,7 +9,7 @@ from functools import wraps
 from dbHandler import UserDatabaseHandler
 
 userdb = UserDatabaseHandler("test_db")
-# userdb.create_table("new_users_db")
+userdb.create_table("new_users_db")
 
 
 class AuthAPI(MethodView):
