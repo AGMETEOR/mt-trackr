@@ -59,7 +59,8 @@ class AuthAPI(MethodView):
 
         else:
             return jsonify({"error": "Please provide username or password"}), 401
-
+            
+    @staticmethod
     def login_required(f):
         @wraps(f)
         def decorated_function(*args, **kwargs):
