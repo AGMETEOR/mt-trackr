@@ -45,11 +45,12 @@ class AdminAPI(MethodView):
         if my_user[3] != "admin":
             return jsonify({"error": "Access denied"}), 403
 
-        if requestId and action:
+        actions = ["approve", "disapprove", "resolve"]
+
+        if requestId and action in actions:
             print(requestId)
             print(action)
             requestItem = db.get_single_record("id", requestId, "requests_db")
-            db.get_single_record("id", 3, "requests_db")
 
             username = requestItem[1]
             title = requestItem[2]
@@ -58,9 +59,51 @@ class AdminAPI(MethodView):
             status = requestItem[5]
             created = requestItem[6]
 
-            if status == "pending":
+            if status == "pending" and action == "approve":
                 db.update_record(requestId, "requests_db", username=username, title=title,
                                  department=department, detail=detail, status="approved", created=str(created))
-                return jsonify({"success": "Approved!"}), 200
-            else:
-                return jsonify({"error": "This request is no longer pending and does not need approval"})
+                return jsonify({"message": "Approved"}), 200
+
+            if status == "pending" and action == "disapprove":
+                db.update_record(requestId, "requests_db", username=username, title=title,
+                                 department=department, detail=detail, status="disapproved", created=str(created))
+                return jsonify({"message": "Disapproved"}), 200
+
+            if status == "pending" and action == "resolve":
+                db.update_record(requestId, "requests_db", username=username, title=title,
+                                 department=department, detail=detail, status="resolved", created=str(created))
+                return jsonify({"message": "Resolved"}), 200
+
+            if status == "approved" and action == "approve":
+                return jsonify({"message": "Was already approved"}), 200
+
+            if status == "approved" and action == "resolve":
+                db.update_record(requestId, "requests_db", username=username, title=title,
+                                 department=department, detail=detail, status="resolved", created=str(created))
+                return jsonify({"message": "Resolved"}), 200
+
+            if status == "approved" and action == "disapprove":
+                db.update_record(requestId, "requests_db", username=username, title=title,
+                                 department=department, detail=detail, status="disapproved", created=str(created))
+                return jsonify({"message": "Disapproved"}), 200
+
+            if status == "disapproved" and action == "disapprove":
+                return jsonify({"message": "Was already disapproved"}), 200
+
+            if status == "disapproved" and action == "approve":
+                return jsonify({"message": "Cant approve .Was already disapproved"}), 200
+
+            if status == "disapproved" and action == "resolve":
+                return jsonify({"message": "Cant resolve .Was already disapproved"}), 200
+
+            if status == "resolved" and action == "resolve":
+                return jsonify({"message": "Was already resolved"}), 200
+
+            if status == "resolved" and action == "disapprove":
+                return jsonify({"message": "Was already resolved"}), 200
+
+            if status == "resolved" and action == "approve":
+                return jsonify({"message": "Was already resolved"}), 200                
+
+        else:
+            return jsonify({"error": "Action specified not allowed"}), 401

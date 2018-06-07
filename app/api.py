@@ -11,9 +11,9 @@ db = DatabaseHandler("test_db")
 # db.create_table("requests_db")
 
 class RequestsAPI(MethodView):
-    decorators = [AuthAPI.login_required]
+    # decorators = [AuthAPI.login_required]
     # post request
-    # @AuthAPI.login_required
+    @AuthAPI.login_required
     def post(user, self):
         returnObj = {}
 
@@ -27,8 +27,7 @@ class RequestsAPI(MethodView):
         status = request.json['status']
         created = str(datetime.datetime.utcnow())
 
-        dataR = db.insert_new_record("requests_db", username=username, title=title,
-                                     department=department, detail=detail, status=status, created=created)
+        dataR = db.insert_new_record("requests_db", username=username, title=title,department=department, detail=detail, status=status, created=created)
 
         returnObj["id"] = dataR[0]
         returnObj["user"] = dataR[1]
@@ -40,7 +39,7 @@ class RequestsAPI(MethodView):
 
         return jsonify(returnObj), 201
 
-    # @AuthAPI.login_required
+    @AuthAPI.login_required
     def get(user, self, requestId):
         returnObj = {}
         if requestId:
@@ -77,7 +76,7 @@ class RequestsAPI(MethodView):
 
             return jsonify(items), 200
 
-    # @AuthAPI.login_required
+    @AuthAPI.login_required
     def put(user, self, requestId):
         returnObj = {}
 
@@ -85,22 +84,30 @@ class RequestsAPI(MethodView):
             abort(400)
 
         if requestId:
+            dataR = db.get_single_record("id", requestId, "requests_db", user)
+
             username = user
             title = request.json['title']
             department = request.json['department']
             detail = request.json['detail']
-            status = request.json['status']
+            status = dataR[5]
             created = str(datetime.datetime.utcnow())
 
-            dataR = db.update_record(requestId, "requests_db", username=username, title=title,
+            if status == "approved":
+                return jsonify({"message":"Cannot edit was already approved"})
+            else:
+
+                dataR = db.update_record(requestId, "requests_db", username=username, title=title,
                                      department=department, detail=detail, status=status, created=created)
+                if dataR:
+                    returnObj["id"] = dataR[0]
+                    returnObj["user"] = dataR[1]
+                    returnObj["title"] = dataR[2]
+                    returnObj["department"] = dataR[3]
+                    returnObj["detail"] = dataR[4]
+                    returnObj["status"] = dataR[5]
+                    returnObj["created"] = dataR[6]
 
-            returnObj["id"] = dataR[0]
-            returnObj["user"] = dataR[1]
-            returnObj["title"] = dataR[2]
-            returnObj["department"] = dataR[3]
-            returnObj["detail"] = dataR[4]
-            returnObj["status"] = dataR[5]
-            returnObj["created"] = dataR[6]
-
-        return jsonify(returnObj), 201
+                    return jsonify(returnObj), 201
+                else: jsonify({"error":"Couldn't update"})
+        return jsonify({"error":"ID was not provided"})
