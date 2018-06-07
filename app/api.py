@@ -8,7 +8,7 @@ from authentication.views import AuthAPI
 import datetime
 
 db = DatabaseHandler("test_db")
-db.create_table("requests_db")
+# db.create_table("requests_db")
 
 class RequestsAPI(MethodView):
     # decorators = [AuthAPI.login_required]
