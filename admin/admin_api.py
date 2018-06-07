@@ -65,9 +65,11 @@ class AdminAPI(MethodView):
             status = requestItem[5]
             created = requestItem[6]
 
-            db.update_record(requestId,"requests_db",username=username, title= title, department=department, detail=detail,status = "approved",created=str(created))
-           
-            return jsonify({"success":"Approved!"}),200
+            if status == "pending":
+                db.update_record(requestId,"requests_db",username=username, title= title, department=department, detail=detail,status = "approved",created=str(created))
+                return jsonify({"success":"Approved!"}),200
+            else:
+                return jsonify({"error":"This request is no longer pending and does not need approval"})
 
 
 
