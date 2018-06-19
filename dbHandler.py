@@ -14,7 +14,7 @@ class DatabaseHandler:
             return({"error": "Could not connect to the database"})
 
     def create_table(self, tbl_name):
-        create_table_cmd = "CREATE TABLE {}(id serial PRIMARY KEY, username varchar(400), title varchar(400), department varchar(100), detail text, status text, created timestamp)".format(
+        create_table_cmd = "CREATE TABLE IF NOT EXISTS {} (id serial PRIMARY KEY, username varchar(400), title varchar(400), department varchar(100), detail text, status text, created timestamp)".format(
             tbl_name)
         self.cursor.execute(create_table_cmd)
 
@@ -105,7 +105,7 @@ class DatabaseHandler:
 class UserDatabaseHandler(DatabaseHandler):
 
     def create_table(self, tbl_name):
-        create_table_cmd = "CREATE TABLE {}(id serial PRIMARY KEY, username varchar(400), password varchar(100), type varchar(20), created timestamp)".format(
+        create_table_cmd = "CREATE TABLE IF NOT EXISTS {} (id serial PRIMARY KEY, username varchar(400), password varchar(100), type varchar(20), created timestamp)".format(
             tbl_name)
 
         self.cursor.execute(create_table_cmd)

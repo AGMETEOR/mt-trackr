@@ -16,8 +16,9 @@ class AdminAPI(MethodView):
     def get(user, self):
 
         db = DatabaseHandler(app.config['DATABASE_NAME'])
-        # db.create_table("requests_db")
+        db.create_table("requests_db")
         userdb = UserDatabaseHandler(app.config['DATABASE_NAME'])
+        userdb.create_table("new_users_db")
 
         my_user = userdb.get_single_record(user, "new_users_db")
 
