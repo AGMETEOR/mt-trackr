@@ -6,15 +6,18 @@ import jwt
 import os
 from authentication.views import AuthAPI
 import datetime
+from flask import current_app as app
 
-db = DatabaseHandler("test_db")
-db.create_table("requests_db")
 
 class RequestsAPI(MethodView):
-    # decorators = [AuthAPI.login_required]
+
     # post request
     @AuthAPI.login_required
     def post(user, self):
+
+        db = DatabaseHandler(app.config['DATABASE_NAME'])
+        # db.create_table("requests_db")
+
         returnObj = {}
 
         if not request.json:
@@ -27,7 +30,8 @@ class RequestsAPI(MethodView):
         status = request.json['status']
         created = str(datetime.datetime.utcnow())
 
-        dataR = db.insert_new_record("requests_db", username=username, title=title,department=department, detail=detail, status=status, created=created)
+        dataR = db.insert_new_record("requests_db", username=username, title=title,
+                                     department=department, detail=detail, status=status, created=created)
 
         returnObj["id"] = dataR[0]
         returnObj["user"] = dataR[1]
@@ -41,6 +45,7 @@ class RequestsAPI(MethodView):
 
     @AuthAPI.login_required
     def get(user, self, requestId):
+        db = DatabaseHandler(app.config['DATABASE_NAME'])
         returnObj = {}
         if requestId:
             dataR = db.get_single_record("id", requestId, "requests_db", user)
@@ -78,6 +83,7 @@ class RequestsAPI(MethodView):
 
     @AuthAPI.login_required
     def put(user, self, requestId):
+        db = DatabaseHandler(app.config['DATABASE_NAME'])
         returnObj = {}
 
         if not request.json:
@@ -94,11 +100,11 @@ class RequestsAPI(MethodView):
             created = str(datetime.datetime.utcnow())
 
             if status == "approved":
-                return jsonify({"message":"Cannot edit was already approved"})
+                return jsonify({"message": "Cannot edit was already approved"})
             else:
 
                 dataR = db.update_record(requestId, "requests_db", username=username, title=title,
-                                     department=department, detail=detail, status=status, created=created)
+                                         department=department, detail=detail, status=status, created=created)
                 if dataR:
                     returnObj["id"] = dataR[0]
                     returnObj["user"] = dataR[1]
@@ -109,5 +115,6 @@ class RequestsAPI(MethodView):
                     returnObj["created"] = dataR[6]
 
                     return jsonify(returnObj), 201
-                else: jsonify({"error":"Couldn't update"})
-        return jsonify({"error":"ID was not provided"})
+                else:
+                    jsonify({"error": "Couldn't update"})
+        return jsonify({"error": "ID was not provided"})

@@ -5,8 +5,6 @@ import jwt
 import pprint
 from dbHandler import DatabaseHandler
 
-db = DatabaseHandler("test_db")
-
 
 class TestClass(unittest.TestCase):
 
@@ -17,35 +15,39 @@ class TestClass(unittest.TestCase):
         self.request_body = {
             "id": 565,
             "title": "Elevator Maintenance",
-            "department": "Accounts", 
+            "department": "Accounts",
             "detail": "We need to repair asap",
             "status": "urgent"
         }
 
         with self.app.test_client() as c:
 
-            self.signres = c.post('/auth/signup/',headers={'Content-Type': 'application/json; charset=utf-8'},data=json.dumps({"username": "testingme", "password": "iamsecret","status":"normal"}))
-            self.tk_res = c.post('/auth/login/', headers={'Content-Type': 'application/json; charset=utf-8'}, data=json.dumps({"username": "testingme", "password": "iamsecret"}))
-            
+            self.signres = c.post('/auth/signup/', headers={'Content-Type': 'application/json; charset=utf-8'}, data=json.dumps(
+                {"username": "testingme", "password": "iamsecret", "status": "normal"}))
+            self.tk_res = c.post('/auth/login/', headers={'Content-Type': 'application/json; charset=utf-8'}, data=json.dumps(
+                {"username": "testingme", "password": "iamsecret"}))
+
             self.data = self.tk_res.get_json()['token']
 
-            
-            
-
-            self.res = c.post('api/v1/users/requests/', headers={'Authorization': self.data,'Content-Type': 'application/json; charset=utf-8'}, data=json.dumps(self.request_body))
+            self.res = c.post('api/v1/users/requests/', headers={
+                              'Authorization': self.data, 'Content-Type': 'application/json; charset=utf-8'}, data=json.dumps(self.request_body))
 
     def test_signup(self):
-        res = self.client().post('auth/signup/',headers={'Content-Type': 'application/json; charset=utf-8'},data=json.dumps({"username": "   ", "password": "iamsecret","status":"normal"}))
-        res_one = res = self.client().post('auth/signup/',headers={'Content-Type': 'application/json; charset=utf-8'},data=json.dumps({"username": "testingme", "password": "iamsecret","status":"normal"}))
-        res_two = res = self.client().post('auth/signup/',headers={'Content-Type': 'application/json; charset=utf-8'},data=json.dumps({"password": "iamsecret","status":"normal"}))
-        self.assertEqual(res.status_code,403)
-        self.assertEqual(res_one.status_code,403)
-        self.assertEqual(res_two.status_code,403)
+        res = self.client().post('auth/signup/', headers={'Content-Type': 'application/json; charset=utf-8'}, data=json.dumps(
+            {"username": "   ", "password": "iamsecret", "status": "normal"}))
+        res_one = res = self.client().post('auth/signup/', headers={'Content-Type': 'application/json; charset=utf-8'}, data=json.dumps(
+            {"username": "testingme", "password": "iamsecret", "status": "normal"}))
+        res_two = res = self.client().post('auth/signup/',
+                                           headers={'Content-Type': 'application/json; charset=utf-8'}, data=json.dumps({"password": "iamsecret", "status": "normal"}))
+        self.assertEqual(res.status_code, 403)
+        self.assertEqual(res_one.status_code, 403)
+        self.assertEqual(res_two.status_code, 403)
         self.assertEqual(self.signres.status_code, 201)
 
     def test_login(self):
-        res = self.client().post('/auth/login/', headers={'Content-Type': 'application/json; charset=utf-8'}, data=json.dumps({"username": "   ", "password": "iamsecret"}))
-        self.assertEqual(res.status_code,403)
+        res = self.client().post('/auth/login/',
+                                 headers={'Content-Type': 'application/json; charset=utf-8'}, data=json.dumps({"username": "   ", "password": "iamsecret"}))
+        self.assertEqual(res.status_code, 403)
         self.assertEqual(self.tk_res.status_code, 200)
         self.assertIn('token', json.loads(self.tk_res.data))
 
@@ -84,8 +86,10 @@ class TestClass(unittest.TestCase):
         self.assertEqual(json.loads(self.res.data)["title"], title)
 
     def tearDown(self):
-        db.truncate_table("new_users_db")
-        db.truncate_table("requests_db")
+
+        db = DatabaseHandler("mt_trackr_test_db")
+        db.reset_table("new_users_db")
+        db.reset_table("requests_db")
 
 
 if __name__ == "__main__":

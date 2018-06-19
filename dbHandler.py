@@ -95,15 +95,11 @@ class DatabaseHandler:
 
     def delete_record(self, tbl_name, id):
         delete_cmd = "DELETE FROM {} WHERE id={}".format(tbl_name, id)
-
         self.cursor.execute(delete_cmd)
 
-    def truncate_table(self,tbl_name):
-        truncate_command = "TRUNCATE {}".format(tbl_name)
-        try:
-            self.cursor.execute(truncate_command)
-        except:
-            return {"error":"Truncate operation could not be peformed"}
+    def reset_table(self, tbl_name):
+        reset_cmd = "TRUNCATE TABLE {} RESTART IDENTITY".format(tbl_name)
+        self.cursor.execute(reset_cmd)
 
 
 class UserDatabaseHandler(DatabaseHandler):
@@ -111,7 +107,7 @@ class UserDatabaseHandler(DatabaseHandler):
     def create_table(self, tbl_name):
         create_table_cmd = "CREATE TABLE {}(id serial PRIMARY KEY, username varchar(400), password varchar(100), type varchar(20), created timestamp)".format(
             tbl_name)
-        
+
         self.cursor.execute(create_table_cmd)
 
     def get_single_record(self, username, tbl_name):

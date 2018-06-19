@@ -8,6 +8,8 @@ from application import create_app
 
 
 app = create_app('dev')
+
+
 manager = Manager(app)
 
 manager.add_command("runserver", Server(

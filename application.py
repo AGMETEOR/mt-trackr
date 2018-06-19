@@ -9,8 +9,6 @@ def create_app(mode):
 
     app.config.from_object(app_configuration[mode])
 
-    # app.config['SECRET_KEY'] = "HAHAHAHA"
-
     from app.views import requests
     from admin.views import admin_requests
     from authentication.views import authentication
