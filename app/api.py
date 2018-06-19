@@ -16,7 +16,7 @@ class RequestsAPI(MethodView):
     def post(user, self):
 
         db = DatabaseHandler(app.config['DATABASE_NAME'])
-        # db.create_table("requests_db")
+        db.create_table("requests_db")
 
         returnObj = {}
 
@@ -46,6 +46,8 @@ class RequestsAPI(MethodView):
     @AuthAPI.login_required
     def get(user, self, requestId):
         db = DatabaseHandler(app.config['DATABASE_NAME'])
+        db.create_table("requests_db")
+
         returnObj = {}
         if requestId:
             dataR = db.get_single_record("id", requestId, "requests_db", user)
@@ -84,6 +86,8 @@ class RequestsAPI(MethodView):
     @AuthAPI.login_required
     def put(user, self, requestId):
         db = DatabaseHandler(app.config['DATABASE_NAME'])
+        db.create_table("requests_db")
+        
         returnObj = {}
 
         if not request.json:

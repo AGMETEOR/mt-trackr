@@ -24,7 +24,7 @@ class AuthAPI(MethodView):
     def post(self):
 
         userdb = UserDatabaseHandler(app.config['DATABASE_NAME'])
-        # userdb.create_table("new_users_db")
+        userdb.create_table("new_users_db")
 
         if 'username' in request.json and 'password' in request.json and 'status' not in request.json:
             user = request.get_json()['username']
