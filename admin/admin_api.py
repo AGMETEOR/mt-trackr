@@ -15,9 +15,9 @@ class AdminAPI(MethodView):
     @AuthAPI.login_required
     def get(user, self):
 
-        db = DatabaseHandler(app.config['DATABASE_NAME'])
+        db = DatabaseHandler(app.config['DATABASE_URL'])
         db.create_table("requests_db")
-        userdb = UserDatabaseHandler(app.config['DATABASE_NAME'])
+        userdb = UserDatabaseHandler(app.config['DATABASE_URL'])
         userdb.create_table("new_users_db")
 
         my_user = userdb.get_single_record(user, "new_users_db")
@@ -45,8 +45,8 @@ class AdminAPI(MethodView):
     @AuthAPI.login_required
     def put(user, self, requestId, action):
 
-        db = DatabaseHandler(app.config['DATABASE_NAME'])
-        userdb = UserDatabaseHandler(app.config['DATABASE_NAME'])
+        db = DatabaseHandler(app.config['DATABASE_URL'])
+        userdb = UserDatabaseHandler(app.config['DATABASE_URL'])
 
         my_user = userdb.get_single_record(user, "new_users_db")
         if my_user[3] != "admin":

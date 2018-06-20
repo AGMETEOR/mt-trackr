@@ -6,7 +6,8 @@ class Config:
     DEBUG = False
     CSRF_ENABLED = True
     SECRET = os.getenv('APP_SECRET')
-    DATABASE_NAME = "mt_trackr_db"
+    DATABASE_URL = os.getenv('DATABASE_URL')
+
 
 
 class DevelopmentConfig(Config):
@@ -18,7 +19,9 @@ class TestingConfig(Config):
 
     TESTING = True
     DEBUG = True
-    DATABASE_NAME = "mt_trackr_test_db"
+    DATABASE_URL = "postgresql://postgres:allan@localhost:5432/mt_trackr_test_db"
+
+
 
 
 app_configuration = {

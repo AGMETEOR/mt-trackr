@@ -1,17 +1,24 @@
 import psycopg2
 import datetime
 import os
+from urllib.parse import urlparse
 
 
 class DatabaseHandler:
-    def __init__(self, db):
+    def __init__(self, db_url):
+        parsed_url = urlparse(db_url)
+        dbname = parsed_url.path[1:]
+        username = parsed_url.username
+        hostname = parsed_url.hostname
+        pwd = parsed_url.password
+        port_number = parsed_url.port
+
         try:
-            self.connection = psycopg2.connect(
-                "dbname = {} user = 'postgres' host = 'localhost' password = 'allan' port = '5432'".format(db))
+            self.connection = psycopg2.connect(database=dbname,user=username,password=pwd,host=hostname,port=port_number)
             self.connection.autocommit = True
             self.cursor = self.connection.cursor()
         except:
-            return({"error": "Could not connect to the database"})
+            print({"error": "Could not connect to the database"})
 
     def create_table(self, tbl_name):
         create_table_cmd = "CREATE TABLE IF NOT EXISTS {} (id serial PRIMARY KEY, username varchar(400), title varchar(400), department varchar(100), detail text, status text, created timestamp)".format(
