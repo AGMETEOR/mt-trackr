@@ -87,7 +87,7 @@ class TestClass(unittest.TestCase):
 
     def tearDown(self):
 
-        db = DatabaseHandler("mt_trackr_test_db")
+        db = DatabaseHandler("postgresql://postgres:allan@localhost:5432/mt_trackr_test_db")
         db.reset_table("new_users_db")
         db.reset_table("requests_db")
 
