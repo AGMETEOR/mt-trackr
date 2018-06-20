@@ -15,7 +15,7 @@ class RequestsAPI(MethodView):
     @AuthAPI.login_required
     def post(user, self):
 
-        db = DatabaseHandler(app.config['DATABASE_NAME'])
+        db = DatabaseHandler(app.config['DATABASE_URL'])
         db.create_table("requests_db")
 
         returnObj = {}
@@ -45,7 +45,7 @@ class RequestsAPI(MethodView):
 
     @AuthAPI.login_required
     def get(user, self, requestId):
-        db = DatabaseHandler(app.config['DATABASE_NAME'])
+        db = DatabaseHandler(app.config['DATABASE_URL'])
         db.create_table("requests_db")
 
         returnObj = {}
@@ -85,7 +85,7 @@ class RequestsAPI(MethodView):
 
     @AuthAPI.login_required
     def put(user, self, requestId):
-        db = DatabaseHandler(app.config['DATABASE_NAME'])
+        db = DatabaseHandler(app.config['DATABASE_URL'])
         db.create_table("requests_db")
         
         returnObj = {}
