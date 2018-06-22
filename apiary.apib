@@ -140,3 +140,41 @@ Maintenance Tracker App is an application that provides users with the ability t
                 
                 "message":"Successfully signed up"
             }
+            
+### For authenticated users to get single maintenance request made by them [GET /api/v1/users/requests/{requestId}/]
+
++ Request (application/json)
+
+        {
+            "username":"some-username",
+            "password":"iamsecret",
+            "status":"normal"
+        }
+
++ Response 201 (application/json)
+
+    + Body
+    
+            {
+                
+                "message":"Successfully signed up"
+            }
+            
+### For authenticated users to edit a maintenance requests made by them [PUT /api/v1/users/requests/{requestId}/]
+
++ Request (application/json)
+
+        {
+            "username":"some-username",
+            "password":"iamsecret",
+            "status":"normal"
+        }
+
++ Response 201 (application/json)
+
+    + Body
+    
+            {
+                
+                "message":"Successfully signed up"
+            }
