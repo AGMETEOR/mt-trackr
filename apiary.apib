@@ -5,15 +5,16 @@ HOST: http://mt-trackr.herokuapp.com/
 
 Maintenance Tracker App is an application that provides users with the ability to reach out to operations or repairs department regarding repair or maintenance requests and monitor the status of their request.
 
-## Signup Collection [/auth/signup/]
+## Authentication Collection [/]
 
-### For new users to signup [POST]
+### For new users to Signup [POST /auth/signup/]
 
 + Request (application/json)
 
         {
             "username":"some-username",
-            "password":"iamsecret"
+            "password":"iamsecret",
+            "status":"normal"
         }
 
 + Response 201 (application/json)
@@ -21,8 +22,29 @@ Maintenance Tracker App is an application that provides users with the ability t
     + Body
     
             {
+                
                 "message":"Successfully signed up"
             }
+### For signed up to Login [POST /auth/login/]
+
++ Request (application/json)
+
+        {
+            "username":"some-username",
+            "password":"iamsecret",
+            "status":"normal"
+        }
+
++ Response 201 (application/json)
+
+    + Body
+    
+            {
+                
+                "message":"Successfully signed up"
+            }
+            
+
 
 
 
