@@ -31,8 +31,7 @@ Maintenance Tracker App is an application that provides users with the ability t
 
         {
             "username":"some-username",
-            "password":"iamsecret",
-            "status":"normal"
+            "password":"iamsecret"
         }
 
 + Response 201 (application/json)
@@ -42,56 +41,4 @@ Maintenance Tracker App is an application that provides users with the ability t
             {
                 
                 "message":"Successfully signed up"
-            }
-            
-
-
-
-
-### Create a New Question [GET]
-
-You may create your own question using this action. It takes a JSON
-object containing a question and a collection of answers in the
-form of choices.
-
-
-
-+ Request (application/json)
-
-        {
-            "question": "Favourite programming language?",
-            "choices": [
-                "Swift",
-                "Python",
-                "Objective-C",
-                "Ruby"
-            ]
-        }
-
-+ Response 201 (application/json)
-
-    + Headers
-
-            Location: /questions/2
-
-    + Body
-
-            {
-                "question": "Favourite programming language?",
-                "published_at": "2015-08-05T08:40:51.620Z",
-                "choices": [
-                    {
-                        "choice": "Swift",
-                        "votes": 0
-                    }, {
-                        "choice": "Python",
-                        "votes": 0
-                    }, {
-                        "choice": "Objective-C",
-                        "votes": 0
-                    }, {
-                        "choice": "Ruby",
-                        "votes": 0
-                    }
-                ]
             }
