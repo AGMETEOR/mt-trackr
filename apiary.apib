@@ -27,8 +27,18 @@ Maintenance Tracker App is an application that provides users with the ability t
     
             {
                 
-                "message":"Successfully signed up"
+                "message":"You were successfully signed up",
+                "login":"http://127.0.0.1:5001/api/v1/login/"
             }
+            
++ Response 403 (application/json)
+    
+    + Body 
+    
+            {
+                "error":"Username already exists!"
+            }
+            
 ### For signed up to Login [POST /auth/login/]
 
 + Request (application/json)
@@ -43,7 +53,7 @@ Maintenance Tracker App is an application that provides users with the ability t
     + Body
     
             {
-                "username":"somee-username",
+                "username":"some-username",
                 "token":"generatedtoken"
             }
 
@@ -54,6 +64,7 @@ Maintenance Tracker App is an application that provides users with the ability t
             {
                 "error":"Password and username didn't match"
             }
+            
             
 + Response 403 (application/json)
     
