@@ -39,7 +39,7 @@ Maintenance Tracker App is an application that provides users with the ability t
                 "error":"Username already exists!"
             }
             
-### For signed up to Login [POST /auth/login/]
+### For signed up users to Login [POST /auth/login/]
 
 + Request (application/json)
 
@@ -78,13 +78,30 @@ Maintenance Tracker App is an application that provides users with the ability t
 
 ### For admin to get all requests made [GET /requests/]
 
-+ Response 201 (application/json)
++ Response 200 (application/json)
 
     + Body
     
             {
-                
-                "message":"Successfully signed up"
+                "requests": [
+                                {
+                                    "created": "Wed, 20 Jun 2018 21:41:44 GMT",
+                                    "department": "Stores",
+                                    "detail": "We need to repair asap",
+                                    "id": 1,
+                                    "status": "pending",
+                                    "title": "Elevator Maintenance",
+                                    "user": "agmeteor"
+                                }
+                            ]
+            }
+    
++ Response 403 (application/json)
+    
+    + Body 
+    
+            {
+                "error":"Access denied"
             }
             
 ### For admin to get a particular request [GET /requests/{requestId}/]
