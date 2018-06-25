@@ -38,13 +38,29 @@ Maintenance Tracker App is an application that provides users with the ability t
             "password":"iamsecret"
         }
 
-+ Response 201 (application/json)
++ Response 200 (application/json)
 
     + Body
     
             {
-                
-                "message":"Successfully logged in"
+                "username":"somee-username",
+                "token":"generatedtoken"
+            }
+
++ Response 401 (application/json)
+
+    + Body
+    
+            {
+                "error":"Password and username didn't match"
+            }
+            
++ Response 403 (application/json)
+    
+    + Body 
+    
+            {
+                "error":"Invalid format. no spaces"
             }
             
 ## Administrator Collection [//]
