@@ -104,20 +104,10 @@ Maintenance Tracker App is an application that provides users with the ability t
                 "error":"Access denied"
             }
             
-### For admin to get a particular request [GET /requests/{requestId}/]
 
-+ Response 201 (application/json)
-
-    + Body
-    
-            {
-                
-                "message":"Successfully signed up"
-            }
-            
 ### For admin to approve a particular request [PUT /requests/{requestId}/approve/]
 
-+ Response 201 (application/json)
++ Response 200 (application/json)
 
     + Body
     
@@ -128,18 +118,18 @@ Maintenance Tracker App is an application that provides users with the ability t
 
 ### For admin to disapprove a particular request [PUT /requests/{requestId}/disapprove/]
 
-+ Response 201 (application/json)
++ Response 200 (application/json)
 
     + Body
     
             {
                 
-                "message":"Disaproved"
+                "message":"Disapproved"
             }
             
-### For admin to disapprove a particular request [PUT /requests/{requestId}/resolve/]
+### For admin to resolve a particular request [PUT /requests/{requestId}/resolve/]
 
-+ Response 201 (application/json)
++ Response 200 (application/json)
 
     + Body
     
@@ -155,9 +145,11 @@ Maintenance Tracker App is an application that provides users with the ability t
 + Request (application/json)
 
         {
-            "username":"some-username",
-            "password":"iamsecret",
-            "status":"normal"
+            
+            "title": "Stairs Maintenance",
+            "department": "Accounts",
+            "detail": "We need to repair asap",
+            "status":"pending"
         }
 
 + Response 201 (application/json)
@@ -165,64 +157,66 @@ Maintenance Tracker App is an application that provides users with the ability t
     + Body
     
             {
-                
-                "message":"Successfully signed up"
+                "created": "Tue, 19 Jun 2018 18:03:54 GMT",
+                "department": "Stores",
+                "detail": "We need to repair asap",
+                "id": 1,
+                "status": "pending",
+                "title": "Elevator Maintenance",
+                "user": "agmeteor"
             }
             
             
 ### For authenticated users to get all maintenance requests made by them [GET /api/v1/users/requests/]
 
-+ Request (application/json)
-
-        {
-            "username":"some-username",
-            "password":"iamsecret",
-            "status":"normal"
-        }
-
-+ Response 201 (application/json)
++ Response 200 (application/json)
 
     + Body
     
             {
-                
-                "message":"Successfully signed up"
+                "created": "Tue, 19 Jun 2018 18:03:54 GMT",
+                "department": "Stores",
+                "detail": "We need to repair asap",
+                "id": 1,
+                "status": "pending",
+                "title": "Elevator Maintenance",
+                "user": "agmeteor"
             }
             
 ### For authenticated users to get single maintenance request made by them [GET /api/v1/users/requests/{requestId}/]
 
-+ Request (application/json)
-
-        {
-            "username":"some-username",
-            "password":"iamsecret",
-            "status":"normal"
-        }
-
-+ Response 201 (application/json)
++ Response 200 (application/json)
 
     + Body
     
             {
-                
-                "message":"Successfully signed up"
+                "created": "Tue, 19 Jun 2018 18:03:54 GMT",
+                "department": "Stores",
+                "detail": "We need to repair asap",
+                "id": 1,
+                "status": "pending",
+                "title": "Elevator Maintenance",
+                "user": "agmeteor"
             }
             
 ### For authenticated users to edit a maintenance requests made by them [PUT /api/v1/users/requests/{requestId}/]
 
 + Request (application/json)
 
-        {
-            "username":"some-username",
-            "password":"iamsecret",
-            "status":"normal"
-        }
-
+            {
+                "department": "Stores",
+                "detail": "We need to repair asap",
+                "status": "pending",
+                "title": "Elevator Maintenance"
+            }
+            
 + Response 201 (application/json)
 
     + Body
     
             {
-                
-                "message":"Successfully signed up"
+                "department": "Stores",
+                "detail": "We need to repair asap",
+                "status": "pending",
+                "title": "Elevator Maintenance"
             }
