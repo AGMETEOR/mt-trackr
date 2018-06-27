@@ -41,8 +41,8 @@ class AuthAPI(MethodView):
                 if bcrypt.checkpw(password.encode(), hashed_password.encode()):
                     token = self.generate_token(user)
                     response = make_response(jsonify({"username": user, "token": token}))
-                    header = response.headers
-                    header['Access-Control-Allow-Origin'] = '*'
+                    response.headers['Access-Control-Allow-Origin'] = '*'
+                    response.headers['Access-Control-Allow-Methods'] = 'DELETE, GET, POST, PUT'
                     return response, 200
                 else:
                     return jsonify({"error": "Password and username didn't match"}), 401
