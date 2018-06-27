@@ -1,13 +1,10 @@
 from flask import Flask
 from settings import app_configuration
-from flask_cors import CORS
+
 
 
 def create_app(mode):
     app = Flask(__name__)
-
-    CORS(app, resources=r'/*')
-    
 
     app.config.from_pyfile('settings.py')
 
