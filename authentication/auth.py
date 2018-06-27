@@ -31,18 +31,18 @@ class AuthAPI(MethodView):
         if 'username' in request.json and 'password' in request.json and 'status' not in request.json:
             user = request.get_json()['username']
             if len(user.strip()) == 0:
-                return jsonify({"error": "Invalid format. no spaces"}).headers.add('Access-Control-Allow-Origin', '*'), 403
+                return jsonify({"error": "Invalid format. no spaces"}), 403
             password = request.get_json()['password']
             my_user = userdb.get_single_record(user, "new_users_db")
             if my_user is not None:
                 hashed_password = my_user[2]
                 if bcrypt.checkpw(password.encode(), hashed_password.encode()):
                     token = self.generate_token(user)
-                    return jsonify({"username": user, "token": token}).headers.add('Access-Control-Allow-Origin', '*'), 200
+                    return jsonify({"username": user, "token": token}), 200
                 else:
-                    return jsonify({"error": "Password and username didn't match"}).headers.add('Access-Control-Allow-Origin', '*'), 401
+                    return jsonify({"error": "Password and username didn't match"}), 401
             else:
-                return jsonify({"error": "Wrong username or password"}).headers.add('Access-Control-Allow-Origin', '*'), 401
+                return jsonify({"error": "Wrong username or password"}), 401
         elif 'username' in request.json and 'password' in request.json and 'status' in request.json:
 
             user = request.get_json()['username']
