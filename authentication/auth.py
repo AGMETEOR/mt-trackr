@@ -9,7 +9,7 @@ import os
 from functools import wraps
 from dbHandler import UserDatabaseHandler
 from flask import current_app as app
-from flask_cors import cross_origin
+
 
 
 class AuthAPI(MethodView):
@@ -23,7 +23,6 @@ class AuthAPI(MethodView):
 
     # user login and return token
     def post(self):
-        decorators = [cross_origin]
 
         userdb = UserDatabaseHandler(app.config['DATABASE_URL'])
 

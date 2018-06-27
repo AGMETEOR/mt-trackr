@@ -6,8 +6,8 @@ from flask_cors import CORS
 def create_app(mode):
     app = Flask(__name__)
 
-    CORS(app)
-    app.config['CORS_HEADERS'] = 'Content-Type'
+    CORS(app,supports_credentials=True, headers=['Content-Type', 'Authorization'])
+    
 
     app.config.from_pyfile('settings.py')
 
