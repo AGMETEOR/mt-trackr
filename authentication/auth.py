@@ -1,6 +1,6 @@
 
 from flask.views import MethodView
-from flask import jsonify, request, abort
+from flask import jsonify, request, abort, make_response
 import json
 import bcrypt
 import jwt
@@ -9,7 +9,7 @@ import os
 from functools import wraps
 from dbHandler import UserDatabaseHandler
 from flask import current_app as app
-from flask_cors import cross_origin
+
 
 
 
@@ -23,7 +23,7 @@ class AuthAPI(MethodView):
         return token
 
     # user login and return token
-    @cross_origin()
+
     def post(self):
 
         userdb = UserDatabaseHandler(app.config['DATABASE_URL'])
@@ -40,7 +40,10 @@ class AuthAPI(MethodView):
                 hashed_password = my_user[2]
                 if bcrypt.checkpw(password.encode(), hashed_password.encode()):
                     token = self.generate_token(user)
-                    return jsonify({"username": user, "token": token}), 200
+                    response = make_response(jsonify({"username": user, "token": token}))
+                    header = response.headers
+                    header['Access-Control-Allow-Origin'] = '*'
+                    return response, 200
                 else:
                     return jsonify({"error": "Password and username didn't match"}), 401
             else:
