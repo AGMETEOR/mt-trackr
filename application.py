@@ -8,6 +8,8 @@ def create_app(mode):
 
     CORS(app)
 
+    app.config['CORS_HEADERS'] = 'Content-Type'
+
     app.config.from_pyfile('settings.py')
 
     app.config.from_object(app_configuration[mode])
