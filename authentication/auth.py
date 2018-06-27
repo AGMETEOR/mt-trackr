@@ -1,6 +1,6 @@
 
 from flask.views import MethodView
-from flask import jsonify, request, abort, make_response
+from flask import jsonify, request, abort
 import json
 import bcrypt
 import jwt
@@ -40,10 +40,7 @@ class AuthAPI(MethodView):
                 hashed_password = my_user[2]
                 if bcrypt.checkpw(password.encode(), hashed_password.encode()):
                     token = self.generate_token(user)
-                    response = make_response(jsonify({"username": user, "token": token}))
-                    response.headers['Access-Control-Allow-Origin'] = '*'
-                    response.headers['Access-Control-Allow-Methods'] = 'DELETE, GET, POST, PUT'
-                    return response, 200
+                    return jsonify({"username": user, "token": token}), 200
                 else:
                     return jsonify({"error": "Password and username didn't match"}), 401
             else:
