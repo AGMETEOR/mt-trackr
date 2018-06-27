@@ -23,7 +23,7 @@ class AuthAPI(MethodView):
         return token
 
     # user login and return token
-    @cross_origin
+    @cross_origin()
     def post(self):
 
         userdb = UserDatabaseHandler(app.config['DATABASE_URL'])
