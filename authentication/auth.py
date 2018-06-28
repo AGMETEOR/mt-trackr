@@ -41,7 +41,7 @@ class AuthAPI(MethodView):
                 hashed_password = my_user[2]
                 if bcrypt.checkpw(password.encode(), hashed_password.encode()):
                     token = self.generate_token(user)
-                    return jsonify({"username": user, "token": token, "status":my_user[3]}), 200
+                    return jsonify({"username": user, "token": token, "status":my_user[3],"expiresIn":3600}), 200
                 else:
                     return jsonify({"error": "Password and username didn't match"}), 401
             else:
