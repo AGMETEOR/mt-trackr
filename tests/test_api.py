@@ -12,20 +12,21 @@ class TestClass(unittest.TestCase):
         self.app = create_app("testing")
         self.client = self.app.test_client
 
+
         self.request_body = {
-            "id": 565,
             "title": "Elevator Maintenance",
             "department": "Accounts",
             "detail": "We need to repair asap",
-            "status": "urgent"
+            "urgent": False
         }
 
         with self.app.test_client() as c:
 
             self.signres = c.post('/auth/signup/', headers={'Content-Type': 'application/json; charset=utf-8'}, data=json.dumps(
-                {"username": "testingme", "password": "iamsecret", "status": "normal"}))
+                {"username": "testingme", "password": "iamsecret", "is_admin": False}))
             self.tk_res = c.post('/auth/login/', headers={'Content-Type': 'application/json; charset=utf-8'}, data=json.dumps(
                 {"username": "testingme", "password": "iamsecret"}))
+            
 
             self.data = self.tk_res.get_json()['token']
 
@@ -34,11 +35,11 @@ class TestClass(unittest.TestCase):
 
     def test_signup(self):
         res = self.client().post('auth/signup/', headers={'Content-Type': 'application/json; charset=utf-8'}, data=json.dumps(
-            {"username": "   ", "password": "iamsecret", "status": "normal"}))
+            {"username": "   ", "password": "iamsecret", "is_admin": False}))
         res_one = res = self.client().post('auth/signup/', headers={'Content-Type': 'application/json; charset=utf-8'}, data=json.dumps(
-            {"username": "testingme", "password": "iamsecret", "status": "normal"}))
+            {"username": "testingme", "password": "iamsecret", "is_admin": False}))
         res_two = res = self.client().post('auth/signup/',
-                                           headers={'Content-Type': 'application/json; charset=utf-8'}, data=json.dumps({"password": "iamsecret", "status": "normal"}))
+                                           headers={'Content-Type': 'application/json; charset=utf-8'}, data=json.dumps({"password": "iamsecret", "is_admin": False}))
         self.assertEqual(res.status_code, 403)
         self.assertEqual(res_one.status_code, 403)
         self.assertEqual(res_two.status_code, 403)

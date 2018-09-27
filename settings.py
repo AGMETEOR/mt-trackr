@@ -19,7 +19,7 @@ class TestingConfig(Config):
 
     TESTING = True
     DEBUG = True
-    DATABASE_URL = "postgresql://postgres:allan@localhost:5432/mt_trackr_test_db"
+    DATABASE_URL = "postgresql://postgres:ruth4boaz@localhost:5432/mt_trackr_test_db"
 
 
 
