@@ -26,20 +26,21 @@ class RequestsAPI(MethodView):
         username = user
         title = request.json['title']
         department = request.json['department']
+        urgent = request.json['urgent']
         detail = request.json['detail']
-        status = request.json['status']
         created = str(datetime.datetime.utcnow())
 
         dataR = db.insert_new_record("requests_db", username=username, title=title,
-                                     department=department, detail=detail, status=status, created=created)
+                                     department=department, urgent=urgent, status="pending", detail=detail,created=created)
 
         returnObj["id"] = dataR[0]
         returnObj["user"] = dataR[1]
         returnObj["title"] = dataR[2]
         returnObj["department"] = dataR[3]
         returnObj["detail"] = dataR[4]
-        returnObj["status"] = dataR[5]
-        returnObj["created"] = dataR[6]
+        returnObj["urgent"] = dataR[5]
+        returnObj["status"] = dataR[6]
+        returnObj["created"] = dataR[7]
 
         return jsonify(returnObj), 201
 
@@ -60,8 +61,9 @@ class RequestsAPI(MethodView):
             returnObj["title"] = dataR[2]
             returnObj["department"] = dataR[3]
             returnObj["detail"] = dataR[4]
-            returnObj["status"] = dataR[5]
-            returnObj["created"] = dataR[6]
+            returnObj["urgent"] = dataR[5]
+            returnObj["status"] = dataR[6]
+            returnObj["created"] = dataR[7]
 
             return jsonify({"requests": [returnObj]}), 200
         else:
@@ -76,8 +78,9 @@ class RequestsAPI(MethodView):
                     "title": i[2],
                     "department": i[3],
                     "detail": i[4],
-                    "status": i[5],
-                    "created": i[6]
+                    "urgent": i[5],
+                    "status": i[6],
+                    "created": i[7]
                 }
                 items['requests'].append(_dict)
 
@@ -95,16 +98,18 @@ class RequestsAPI(MethodView):
 
         if requestId:
             dataR = db.get_single_record("id", requestId, "requests_db", user)
+            print(dataR)
 
             username = user
             title = request.json['title']
             department = request.json['department']
             detail = request.json['detail']
-            status = dataR[5]
+            urgent = dataR[5]
+            status = dataR[6]
             created = str(datetime.datetime.utcnow())
 
             if status == "approved":
-                return jsonify({"message": "Cannot edit was already approved"})
+                return jsonify({"message": "Cannot edit was already approved"}), 400
             else:
 
                 dataR = db.update_record(requestId, "requests_db", username=username, title=title,
@@ -116,9 +121,11 @@ class RequestsAPI(MethodView):
                     returnObj["department"] = dataR[3]
                     returnObj["detail"] = dataR[4]
                     returnObj["status"] = dataR[5]
-                    returnObj["created"] = dataR[6]
+                    returnObj["status"] = dataR[6]
+                    returnObj["created"] = dataR[7]
+                    returnObj["message"] = "Edited '{}' successfully".format(dataR[2])
 
-                    return jsonify(returnObj), 201
+                    return jsonify(returnObj), 200
                 else:
                     jsonify({"error": "Couldn't update"})
         return jsonify({"error": "ID was not provided"})

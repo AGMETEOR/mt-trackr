@@ -22,7 +22,7 @@ class AdminAPI(MethodView):
 
         my_user = userdb.get_single_record(user, "new_users_db")
 
-        if my_user[3] != "admin":
+        if my_user[3] != True:
             return jsonify({"error": "Access denied"}), 403
 
         requestItems = db.get_all_records("requests_db")
@@ -35,8 +35,9 @@ class AdminAPI(MethodView):
                 "title": i[2],
                 "department": i[3],
                 "detail": i[4],
-                "status": i[5],
-                "created": i[6]
+                "urgent": i[5],
+                "status": i[6],
+                "created": i[7]
             }
             items['requests'].append(_dict)
 
@@ -49,7 +50,7 @@ class AdminAPI(MethodView):
         userdb = UserDatabaseHandler(app.config['DATABASE_URL'])
 
         my_user = userdb.get_single_record(user, "new_users_db")
-        if my_user[3] != "admin":
+        if my_user[3] != True:
             return jsonify({"error": "Access denied"}), 403
 
         actions = ["approve", "disapprove", "resolve"]
@@ -63,8 +64,9 @@ class AdminAPI(MethodView):
             title = requestItem[2]
             department = requestItem[3]
             detail = requestItem[4]
-            status = requestItem[5]
-            created = requestItem[6]
+            urgent = requestItem[5]
+            status = requestItem[6]
+            created = requestItem[7]
 
             if status == "pending" and action == "approve":
                 db.update_record(requestId, "requests_db", username=username, title=title,

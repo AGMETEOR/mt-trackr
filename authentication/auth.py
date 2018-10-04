@@ -31,7 +31,7 @@ class AuthAPI(MethodView):
 
         userdb.create_table("new_users_db")
 
-        if 'username' in request.json and 'password' in request.json and 'status' not in request.json:
+        if 'username' in request.json and 'password' in request.json and 'is_admin' not in request.json:
             user = request.get_json()['username']
             if len(user.strip()) == 0:
                 return jsonify({"error": "Invalid format. no spaces"}), 403
@@ -41,12 +41,12 @@ class AuthAPI(MethodView):
                 hashed_password = my_user[2]
                 if bcrypt.checkpw(password.encode(), hashed_password.encode()):
                     token = self.generate_token(user)
-                    return jsonify({"username": user, "token": token, "status":my_user[3],"expiresIn":3600}), 200
+                    return jsonify({"username": user, "token": token, "is_admin":my_user[3],"expiresIn":3600}), 200
                 else:
                     return jsonify({"error": "Password and username didn't match"}), 401
             else:
                 return jsonify({"error": "Wrong username or password"}), 401
-        elif 'username' in request.json and 'password' in request.json and 'status' in request.json:
+        elif 'username' in request.json and 'password' in request.json and 'is_admin' in request.json:
 
             user = request.get_json()['username']
             if len(user.strip()) == 0:
@@ -57,11 +57,11 @@ class AuthAPI(MethodView):
                 hashed_passw = bcrypt.hashpw(
                     request.get_json()["password"].encode(), bcrypt.gensalt())
                 passw = hashed_passw.decode()
-                stat = request.get_json()['status']
+                stat = request.get_json()['is_admin']
                 cretd = str(datetime.datetime.utcnow())
 
                 userdb.insert_new_record(
-                    "new_users_db", username=user, password=passw, type=stat, created=cretd)
+                    "new_users_db", username=user, password=passw, is_admin=stat, created=cretd)
 
                 return jsonify({
                     "message": "You were successfully signed up",
@@ -91,7 +91,7 @@ class AuthAPI(MethodView):
                 else:
                     return jsonify({"error": "Authentication token was not provided"}), 401
             else:
-                return jsonify({"error": " Auth Headers not set"})
+                return jsonify({"error": " Auth Headers not set"}), 401
 
             return f(user, *args, **kwargs)
         return decorated_function
